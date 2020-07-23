@@ -94,6 +94,8 @@ for i, f in enumerate(files):
             full_spec['paths'].update(spec['paths'])
             full_spec['components']['schemas'].update(spec['components']['schemas'])
 
+full_spec['info']['title'] = 'LSP Lending spec'
+full_spec['info']['description'] = open("README.md").read()
 
 
 
