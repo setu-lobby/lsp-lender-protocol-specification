@@ -3,7 +3,7 @@ import json
 import urllib.parse
 import random, string
 cwd = os.path.dirname(os.path.realpath(__file__))
-
+import re
 print(cwd)
 
 
@@ -55,7 +55,7 @@ def fix_schema_props(schema, dest):
 
 def fix_schema(ghpath, dest):
     p = urllib.parse.unquote(ghpath).replace("https://github.com/juspay/lsp-lender-protocol-specification/blob/master/", "")
-    if p.startswith("#/components/schemas"): return
+    if p.startswith("#/components/schemas"): return p
 
     p = os.path.join(cwd, p)
     if p not in files:
@@ -81,7 +81,13 @@ for i, f in enumerate(files):
         spec['components']['schemas'] = {}
         spec['paths'] = {p.strip(): v for p, v in spec['paths'].items()}
         for p, v in spec['paths'].items():
+            op = p.split("/")[-1]
+            o2 = re.sub(r'(?<!^)(?=[A-Z])', '_', op).lower()
+            # v['operationId'] = op
+            o2 = o2.replace("_request", "").replace("_response", "")
             for m, vm in v.items():
+                vm['operationId'] = op
+                vm['tags'] = [o2]
                 reqRef = vm['requestBody']['content']['application/json']['schema']['$ref']
                 saved_as = fix_schema(reqRef, spec['components']['schemas'])
                 vm['requestBody']['content']['application/json']['schema']['$ref'] = saved_as
