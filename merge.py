@@ -34,30 +34,43 @@ def fix_examples(d):
     if isinstance(d, list):
         for val in d: fix_examples(val)
 
+def fix_schema_props(schema, dest):
+    schema_props = schema.get('properties', {})
+
+    for pn, pv in schema_props.items():
+        if pv.get("type") == 'object':
+            fix_schema_props(pv, dest)
+        for pvk, pvv in pv.items():
+            if pvk == "$ref":
+                pv[pvk] = fix_schema(pvv, dest)
+            if isinstance(pvv, dict) and pvv.get('type') == 'object':
+                print(pvv)
+                fix_schema_props(pvv, dest)
+            if pvk == 'items':
+                if "$ref" in pvv.keys():
+                    pvv['$ref'] = fix_schema(pvv['$ref'], dest)
+                fix_schema_props(pvv, dest)
+        fix_examples(pv)
+
+
 def fix_schema(ghpath, dest):
     p = urllib.parse.unquote(ghpath).replace("https://github.com/juspay/lsp-lender-protocol-specification/blob/master/", "")
+    if p.startswith("#/components/schemas"): return
+
     p = os.path.join(cwd, p)
     if p not in files:
         print("Not found", p)
     schema = json.load(open(p))
     del schema["$schema"]
     del schema["$id"]
-    schema_props = schema.get('properties', {})
-    for pn, pv in schema_props.items():
-        for pvk, pvv in pv.items():
-            if pvk == "$ref":
-                pv[pvk] = fix_schema(pvv, dest)
-            if pvk == 'items':
-                if "$ref" in pvv.keys():
-                    pvv['$ref'] = fix_schema(pvv['$ref'], dest)
-
-        fix_examples(pv)
+    fix_schema_props(schema, dest)
     
     if 'required' in schema.keys() and len(schema.get('required', [])) == 0:
         del schema['required']
 
     saveas = "schema_" + "".join(random.choice(string.ascii_letters) for i in range(10))
     dest[saveas] = schema
+    print(saveas)
     return "#/components/schemas/" + saveas
     
 
