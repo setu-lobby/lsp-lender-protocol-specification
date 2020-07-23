@@ -44,7 +44,7 @@ def fix_schema_props(schema, dest):
             if pvk == "$ref":
                 pv[pvk] = fix_schema(pvv, dest)
             if isinstance(pvv, dict) and pvv.get('type') == 'object':
-                print(pvv)
+                # print(pvv)
                 fix_schema_props(pvv, dest)
             if pvk == 'items':
                 if "$ref" in pvv.keys():
@@ -70,7 +70,7 @@ def fix_schema(ghpath, dest):
 
     saveas = "schema_" + "".join(random.choice(string.ascii_letters) for i in range(10))
     dest[saveas] = schema
-    print(saveas)
+    # print(saveas)
     return "#/components/schemas/" + saveas
     
 
@@ -95,8 +95,8 @@ for i, f in enumerate(files):
             full_spec['components']['schemas'].update(spec['components']['schemas'])
 
 full_spec['info']['title'] = 'LSP Lending spec'
-full_spec['info']['description'] = """
 
+full_spec['info']['description'] = """
 Sourcing, identity verification, underwriting, disbursement, recollections and dispute management are few of the many responsibilities managed by a lender today.  Historically, the best lenders have had to excel at each of these skills in order to maximise their profit pools and serve the larger and larger markets.
 
 LSP is an initiative to unbundle lending and enable the creation of specialized entities, each specialized at one part of the job. Therefore, we envision the future of lending to be a partnership between multiple firms individually focused on sourcing/distribution, identity verification, underwriting, capital arrangement, recollections, etc.
