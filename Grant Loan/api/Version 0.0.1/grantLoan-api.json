@@ -8,7 +8,7 @@
     "paths":{
         "/v3/loan/grantLoanRequest":{
             "post":{
-                "description":"Invokes by LSP to Grant Loan",
+                "description":"Invoked by LSP to Grant Loan",
                 "requestBody":{
                     "description":"Request to lender to Grant Loan",
                     "content":{
@@ -64,7 +64,7 @@
         },
         "/v3/loan/LoanSummaryRequest":{
             "post":{
-                "description":"Invokes by LSP requesting loan summary",
+                "description":"Invoked by LSP requesting loan summary",
                 "requestBody":{
                     "description":"Request to lender for loan summary",
                     "content":{
@@ -120,7 +120,7 @@
         },
         "/v3/loan/getLoanRequest":{
             "post":{
-                "description":"Invokes by LSP requesting details of a loan",
+                "description":"Invoked by LSP requesting details of a loan",
                 "requestBody":{
                     "description":"Request to lender for loan details",
                     "content":{
@@ -176,7 +176,7 @@
         },
         "/v3/loan/loanStatementRequest":{
             "post":{
-                "description":"Invokes by LSP requesting loan statement",
+                "description":"Invoked by LSP requesting loan statement",
                 "requestBody":{
                     "description":"Request to lender for loan statement",
                     "content":{
@@ -232,7 +232,7 @@
         },
         "/v3/loan/listLoansRequest":{
             "post":{
-                "description":"Invokes by LSP requesting list of the loan provisioned",
+                "description":"Invoked by LSP requesting list of the loan provisioned",
                 "requestBody":{
                     "description":"Request to lender for list of the loan provisioned",
                     "content":{
