@@ -47,6 +47,10 @@ def fix_schema(ghpath, dest):
         for pvk, pvv in pv.items():
             if pvk == "$ref":
                 pv[pvk] = fix_schema(pvv, dest)
+            if pvk == 'items':
+                if "$ref" in pvv.keys():
+                    pvv['$ref'] = fix_schema(pvv['$ref'], dest)
+
         fix_examples(pv)
     
     if 'required' in schema.keys() and len(schema.get('required', [])) == 0:
